@@ -71,6 +71,13 @@ class Board
     @board[x][y]
   end
 
+  def valid_piece(pos, color)
+    return false if get_spot?(pos).nil?
+    return jump_pieces.include?(get_spot?(pos)) if jump_available?(color)
+    p "ph"
+    pieces(color).include?(get_spot?(pos)) 
+  end
+
   def valid_pos?(pos)
     pos.all? { |coord| coord.between?(0, 7) }
   end

@@ -24,18 +24,8 @@ class Game
       begin
       moves = @current_player.gets_move
       
-      # error handling, pick a valid piece
-      if @board.get_spot?(moves[0]).nil? || @board.get_spot?(moves[0]).color != cur_color
-      	raise "Please select your own piece"
-
-      # if jump is availble you must pick a jumping piece
-      elsif @board.jump_available?(cur_color) &&
-        !@board.jump_pieces(cur_color).include?(@board.get_spot?(moves[0]))
-      	raise "You can jump right now, please pick a jumping piece"
-      end
-
-
-
+      raise "Please select a valid piece" if !@board.valid_piece(moves[0], cur_color)
+        
 	  if @board.jump_available?(cur_color) &&
         @board.jump_pieces(cur_color).include?(@board.get_spot?(moves[0]))
         new_start = moves[1].dup
@@ -63,7 +53,7 @@ class Game
     	puts "You can still jump from #{pos}"
     	new_spot = @current_player.move
     	@board.get_spot?(pos).perform_moves([new_spot.dup])
-    	continue(new_spot.dup)
+    	continue(new_spot)
     end
     rescue
     	retry
