@@ -21,45 +21,35 @@ class Piece
   def moves
     returned_moves = []
     direction.each do |delta|
-      pos_ = @pos.dup
-      pos_[0] += delta[0]
-      pos_[1] += delta[1]
-      returned_moves << pos_
+      pos = @pos.dup
+      pos[0] += delta[0]
+      pos[1] += delta[1]
+      returned_moves << pos
     end
-
     returned_moves.select! do |coord|
       board.valid_pos?(coord) && !board.get_spot?(coord)
-    end
-    
-     returned_moves
-  end 
+      end 
+    returned_moves
+  end
 
   def jump
     returned_moves = []
     direction.each do |delta|
-      # move one
-      pos_ = @pos.dup
-      pos_[0] += delta[0]
-      pos_[1] += delta[1]
-      next if !board.valid_pos?(pos_) ||
-        board.get_spot?(pos_).nil? || board.get_spot?(pos_).color == color
-      pos_[0] += delta[0]
-      pos_[1] += delta[1]
-      returned_moves << pos_ if board.valid_pos?(pos_) && board.get_spot?(pos_).nil?  
+      pos = @pos.dup
+      pos[0] += delta[0]
+      pos[1] += delta[1]
+      next if !board.valid_pos?(pos) || board.get_spot?(pos).nil? || 
+        board.get_spot?(pos).color == color
+      pos[0] += delta[0]
+      pos[1] += delta[1]
+      returned_moves << pos if board.valid_pos?(pos) && board.get_spot?(pos).nil?  
       end
-    return returned_moves
+    returned_moves
   end
 
   def king?
-    if color == :black && pos[0] == 7
-      p "true"
-      @king = true 
-    end
-    
-    if color == :white && pos[0] == 0
-      p "true"
-      @king = true
-    end
+    @king = true if color == :black && pos[0] == 7
+    @king = true if color == :white && pos[0] == 0
   end
 
   def piece_between(pos1, pos2)
@@ -76,7 +66,7 @@ class Piece
       board[piece_between(temp_spot, pos)] = nil
       king?
     else
-      raise "you can't do that!"
+      raise "Invalid Move!"
     end
   end
 
@@ -87,7 +77,7 @@ class Piece
       set_pos(pos)
       king?
     else
-      raise "you can't do that!"
+      raise "Invalid Move!"
     end
   end
 
@@ -107,17 +97,13 @@ class Piece
       end
     end
     rescue
-      raise "ValidMoveError"
+      raise "InvalidMoveError"
     end
   end
 
   def perform_moves(move_sequence)
-    if valid_move_seq?(move_sequence.dup)
-      p "somewhere"
-      perform_moves!(move_sequence.dup) 
-    else
-      raise "InvalidMoveError"
-    end
+    return perform_moves!(move_sequence.dup) if valid_move_seq?(move_sequence.dup)  
+    raise "InvalidMoveError"
   end
 
   def valid_move_seq?(move_sequence)
@@ -133,7 +119,6 @@ class Piece
   def set_pos(new_pos)
     @pos = new_pos
   end 
-
 
   def inspect
     return "♔" if color == :white && king == true

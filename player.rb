@@ -6,39 +6,31 @@ class Player
     @color = color    
   end
 
-# validations
-  
   def gets_move
     begin
-      puts "Please select a #{color} piece, eg. 00 = row 0, col 0"
-      input1 = gets.chomp.split("").map(&:to_i) #[1, 1]
-      raise "Please choose 2 numbers" if input1.count != 2
+      puts "Please select a #{color} piece, eg. 03 = row 0, col 3"
+      start_pos = gets.chomp.split("").map(&:to_i)
+      puts "Please where the piece will go, eg. 51 = row 5, col 1"
+      end_pos = gets.chomp.split("").map(&:to_i)
+
+    raise "Hey! It should be 00-77" unless start_pos.all? { |val| val.between?(0,7) } &&
+      end_pos.all? { |val| val.between?(0,7)}
     rescue => e
       puts e.message
       retry
     end
-    
-    begin
-      puts "Please where the piece will go, eg. 00 = row 0, col 0"
-      input2 = gets.chomp.split("").map(&:to_i)
-      raise "Please choose 2 numbers" if input2.count != 2
-    rescue => e
-      puts e.message
-      retry
-    end
-    [input1, input2]  
+    [start_pos, end_pos]  
   end
 
   def move
     begin
-      puts "Please where you want to jump to, eg. 00 = row 0, col 0"
-      input2 = gets.chomp.split("").map(&:to_i) #[1, 1]
-      raise "Please choose 2 numbers" if input2.count != 2
+      puts "Please where you want to jump to, eg. 64 = row 6, col 4"
+      end_pos = gets.chomp.split("").map(&:to_i)
+      raise "Hey! You need to give a valid spot (00-77)" unless end_pos.all? { |val| val.between?(0,7) }
     rescue => e
       puts e.message
       retry    
     end
-    input2
+    end_pos
   end
-    
 end

@@ -1,6 +1,8 @@
 require './piece'
 require './board'
 require './player'
+require 'colorize'
+
 
 class Game
   def initialize
@@ -16,7 +18,7 @@ class Game
   end
 
   def play
-    while @board.pieces(:black).count != 0 || @board.pieces(:black).count != 0
+    until @board.game_over? || @board.draw?
       @board.display
       cur_color = @current_player.color
       begin
@@ -57,12 +59,9 @@ class Game
   def continue(pos)
   	begin
   	@board.display
-  	puts "you are in a loop!"
     if @board.get_spot?(pos).jump.count > 0
-    	puts "you can still jump from #{pos}"
+    	puts "You can still jump from #{pos}"
     	new_spot = @current_player.move
-
-    	print new_spot
     	@board.get_spot?(pos).perform_moves([new_spot.dup])
     	continue(new_spot.dup)
     end

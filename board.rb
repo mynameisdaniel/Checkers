@@ -55,6 +55,7 @@ class Board
     jump_pieces
   end
 
+
   def [](pos)
     row, col = pos
     @board[row][col]    
@@ -103,17 +104,39 @@ class Board
     duped_board
   end
 
+  def game_over?
+    pieces(:black).count == 0 || pieces(:white).count == 0
+  end
+
+  def draw?
+    return false if pieces(:black).any? do |piece| 
+      piece.jump.count > 0 || piece.moves.count > 0
+      end
+    return false if pieces(:white).any? do |piece| 
+      piece.jump.count > 0 || piece.moves.count > 0
+      end  
+    true
+  end
+
   def display
-    print "    0   1   2   3   4   5   6   7"
+    print "   0  1  2  3  4  5  6  7"
     @board.each_with_index do |row, idx|
-      puts "\n   ________________________________"
-      print "#{idx} | "
-      row.each do |piece|
-        print "#{piece.inspect} | " unless piece.nil?
-        print "  | " if piece.nil?
+      print "\n"
+      print "#{idx} "
+      row.each_with_index do |piece, r_idx|
+        if (idx + r_idx) % 2 == 0
+          print " #{piece.inspect} ".colorize(:background => :light_black) unless piece.nil?
+          print "   ".colorize(:background => :light_black) if piece.nil?
+        else
+          print " #{piece.inspect} ".colorize(:background => :light_yellow) unless piece.nil?
+          print "   ".colorize(:background => :light_yellow) if piece.nil?
+        end
       end 
     end
-      puts "\n   ________________________________"
+    print "\n"
+  end
+
+  def inspect
   end
 
 end
