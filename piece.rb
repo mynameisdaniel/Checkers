@@ -90,9 +90,7 @@ class Piece
         perform_jump(move_sequence.first)
       end
     else
-      p move_sequence
       until move_sequence.count == 0
-        p move_sequence.first
         perform_jump(move_sequence.shift)
       end
     end
@@ -102,6 +100,7 @@ class Piece
   end
 
   def perform_moves(move_sequence)
+    puts "in performs moves #{move_sequence}"
     return perform_moves!(move_sequence.dup) if valid_move_seq?(move_sequence.dup)  
     raise "InvalidMoveError"
   end
@@ -123,7 +122,7 @@ class Piece
   def inspect
     return "♔" if color == :white && king == true
     return "♚" if color == :black && king == true
-    color == :white ? "♙" : "♟"
+    color == :white ? "○" : "●"
   end
 
 end

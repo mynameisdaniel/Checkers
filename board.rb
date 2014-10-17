@@ -1,3 +1,5 @@
+require 'byebug'
+
 class Board
   attr_reader :board
   
@@ -72,9 +74,8 @@ class Board
   end
 
   def valid_piece(pos, color)
-    return false if get_spot?(pos).nil?
-    return jump_pieces.include?(get_spot?(pos)) if jump_available?(color)
-    p "ph"
+    return false if get_spot?(pos.dup).nil?
+    return jump_pieces(color).include?(get_spot?(pos.dup)) if jump_available?(color)
     pieces(color).include?(get_spot?(pos)) 
   end
 
@@ -132,11 +133,11 @@ class Board
       print "#{idx} "
       row.each_with_index do |piece, r_idx|
         if (idx + r_idx) % 2 == 0
+          print " #{piece.inspect} ".colorize(:background => :light_white) unless piece.nil?
+          print "   ".colorize(:background => :light_white) if piece.nil?
+        else
           print " #{piece.inspect} ".colorize(:background => :light_black) unless piece.nil?
           print "   ".colorize(:background => :light_black) if piece.nil?
-        else
-          print " #{piece.inspect} ".colorize(:background => :light_yellow) unless piece.nil?
-          print "   ".colorize(:background => :light_yellow) if piece.nil?
         end
       end 
     end
